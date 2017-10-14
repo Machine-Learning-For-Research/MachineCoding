@@ -12,9 +12,8 @@ def bias_variables(shape):
 
 
 def inference(inputs, depth, batch_size):
-    n_hidden = 1024
-    n_layers = 3
-    n_steps = config.MAX_TEXT_LENGTH
+    n_hidden = config.N_HIDDEN
+    n_layers = config.N_LAYERS
 
     # (batch_size, n_steps) => (batch_size, n_steps, depth)
     x = tf.cast(tf.one_hot(inputs, depth), tf.float32)
@@ -28,19 +27,20 @@ def inference(inputs, depth, batch_size):
     x = tf.matmul(x, W) + b
 
     # (batch_size x n_steps, n_hidden) => (batch_size, n_steps, n_hidden)
-    x = tf.reshape(x, [-1, n_steps, n_hidden])
+    x = tf.reshape(x, [batch_size, -1, n_hidden])
 
-    cell = tf.contrib.rnn.BasicLSTMCell(n_hidden)
-    cell = tf.contrib.rnn.MultiRNNCell([cell] * n_layers)
+    cell = tf.contrib.rnn.LSTMCell(n_hidden, state_is_tuple=True, initializer=tf.orthogonal_initializer)
+    cell = tf.contrib.rnn.MultiRNNCell([cell] * n_layers, state_is_tuple=True)
     initial_state = cell.zero_state(batch_size, tf.float32)
 
     outputs, last_state = tf.nn.dynamic_rnn(cell, x, initial_state=initial_state)
-    # (batch_size, n_steps, n_hidden) => (n_steps, batch_size, n_hidden)
-    outputs = tf.transpose(outputs, [1, 0, 2])
-    # (n_steps, batch_size, n_hidden) => n_steps x (batch_size, n_hidden)
-    outputs = tf.unstack(outputs)
-    # n_steps x (batch_size, n_hidden) => (batch_size, n_hidden)
-    x = outputs[-1]
+    # # (batch_size, n_steps, n_hidden) => (n_steps, batch_size, n_hidden)
+    # outputs = tf.transpose(outputs, [1, 0, 2])
+    # # (n_steps, batch_size, n_hidden) => n_steps x (batch_size, n_hidden)
+    # outputs = tf.unstack(outputs)
+    # # n_steps x (batch_size, n_hidden) => (batch_size, n_hidden)
+    # x = outputs[-1]
+    x = tf.reshape(outputs, [-1, n_hidden])
 
     W = weight_variables([n_hidden, depth])
     b = bias_variables([depth])
@@ -50,15 +50,10 @@ def inference(inputs, depth, batch_size):
     return x, initial_state, last_state
 
 
-def choose_result(pred, words):
-    t = np.cumsum(pred)
-    s = np.sum(pred)
-    index = np.searchsorted(t, s * np.random.rand(1))
-    return words[index]
-
-
 def get_train_info(logits, labels, learning_rate):
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits)
     loss = tf.reduce_mean(cross_entropy)
+    # logits = tf.nn.softmax(logits)
+    # loss = tf.reduce_mean(tf.square(logits - labels))
     train_op = tf.train.AdamOptimizer(learning_rate).minimize(loss)
     return train_op, loss

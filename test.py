@@ -1,11 +1,19 @@
+import random
+import sys
+
 import tensorflow as tf
 import numpy as np
+import time
 
-a = [
-    [3, 2, 4],
-    [1, 2, 3],
-]
 
-with tf.Session():
-    a = tf.constant(a)
-    print tf.one_hot(a, 5).eval()
+# i = 0
+# while True:
+#     time.sleep(1)
+#     sys.stdout.write('\r' + str(i))
+#     sys.stdout.flush()
+#     i += 1
+
+a = [1, 2, 3, 4, 5]
+random.shuffle(a)
+print(a)
+
