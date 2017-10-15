@@ -61,6 +61,31 @@ def parse(files):
                     words.append(word)
                 data.append(config.TAG_END)
                 data_set.append(data)
+            # try:
+            #     blocks = f.read().split('\n')
+            # except:
+            #     continue
+            # for part in blocks:
+            #     # if len(part) < 10 or len(part) > 500:
+            #     if len(part) < config.MIN_TEXT_LENGTH \
+            #             or len(part) > config.MAX_TEXT_LENGTH \
+            #             or part.__contains__('#') \
+            #             or part.__contains__('<') \
+            #             or part.__contains__('>') \
+            #             or part.__contains__('\\') \
+            #             or part.__contains__('--') \
+            #             or (part.strip() and part.strip()[0].isupper()) \
+            #             or part.strip().startswith('"'):
+            #         continue
+            #     data = [config.TAG_START]
+            #     for word in part:
+            #         word = ord(word)
+            #         if word >= config.TAG_START:
+            #             continue
+            #         data.append(word)
+            #         words.append(word)
+            #     data.append(config.TAG_END)
+            #     data_set.append(data)
     # words = sorted(list(words))
 
     # 这里根据包含了每个字对应的频率
@@ -104,7 +129,7 @@ def to_codes(data):
             break
         if start:
             codes += chr(w)
-        if w == 256:
+        if w == config.TAG_START:
             start = True
     if not start:
         print('No start tag.')
@@ -119,12 +144,12 @@ def generate_batch(data_set, batch_size, occupy):
     n_batch = int(len(data_set) / batch_size)
     batch_xs = []
     batch_ys = []
-    batch_x = np.full([batch_size, config.MAX_TEXT_LENGTH + 2], occupy)
     for n in range(n_batch):
         start = n * batch_size
         end = (n + 1) * batch_size
-
         batches = data_set[start: end]
+
+        batch_x = np.full([batch_size, config.MAX_TEXT_LENGTH + 2], occupy)
         for b in range(batch_size):
             batch_x[b, :len(batches[b])] = batches[b]
 
@@ -140,7 +165,7 @@ if __name__ == '__main__':
     files = get_all_files(config.TRAIN_PATH)
     print('Load %d files.' % len(files))
 
-    data_set, words, index2word, word2index, occupy = parse(files[:100])
+    data_set, words, index2word, word2index, occupy = parse(files[:])
     print('Total %d words.' % len(words))
     print('Total %d data.' % len(data_set))
 
@@ -149,10 +174,10 @@ if __name__ == '__main__':
         print('Total %d batched.' % len(batch_xs))
         split_line = '========================='
         print('\n[Print Code]\n%s' % split_line)
-        print(array2str(batch_xs[4][:1], lambda d: to_codes(list(map(index2word.get, d))) + "\n%s\n" % split_line))
+        print(array2str(batch_xs[4][:3], lambda d: to_codes(list(map(index2word.get, d))) + "\n%s\n" % split_line))
         # print(array2str(batch_ys[4][:1], lambda d: to_codes(map(index2word.get, d)) + "\n%s\n" % split_line))
 
-    if False:  # print(data length)
+    if True:  # print(data length)
         lengths = [len(data) for data in data_set]
         print('max: %d' % max(lengths))
         print('min: %d' % min(lengths))
@@ -162,4 +187,4 @@ if __name__ == '__main__':
     if False:  # print(codes)
         split_line = '========================='
         print('\n[Print Code]\n%s' % split_line)
-        print(array2str(data_set[:1], lambda d: to_codes(list(map(index2word.get, d))) + "\n%s\n" % split_line))
+        print(array2str(data_set[:10], lambda d: to_codes(list(map(index2word.get, d))) + "\n%s\n" % split_line))

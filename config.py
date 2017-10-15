@@ -8,6 +8,11 @@ TRAIN_PATH = [
 # choose the text if contains one of keywords
 TAG_KEYWORDS = ['def ', 'class ']
 
+# for line
+# MIN_TEXT_LENGTH = 30
+# MAX_TEXT_LENGTH = 80
+
+# for part
 MIN_TEXT_LENGTH = 100
 MAX_TEXT_LENGTH = 1000
 

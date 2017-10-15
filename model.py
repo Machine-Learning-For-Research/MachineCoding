@@ -29,7 +29,7 @@ def inference(inputs, depth, batch_size):
     # (batch_size x n_steps, n_hidden) => (batch_size, n_steps, n_hidden)
     x = tf.reshape(x, [batch_size, -1, n_hidden])
 
-    cell = tf.contrib.rnn.LSTMCell(n_hidden, state_is_tuple=True, initializer=tf.orthogonal_initializer)
+    cell = tf.contrib.rnn.BasicLSTMCell(n_hidden, state_is_tuple=True)
     cell = tf.contrib.rnn.MultiRNNCell([cell] * n_layers, state_is_tuple=True)
     initial_state = cell.zero_state(batch_size, tf.float32)
 

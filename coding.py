@@ -25,7 +25,7 @@ if __name__ == '__main__':
     print('Total %d data.' % len(data_set))
 
     batch_size = 1
-    depth = len(words)
+    depth = len(words) + 2
     x = tf.placeholder(tf.int32, [1, None])
 
     logits, initial_state, last_state = model.inference(x, depth, batch_size)
@@ -55,7 +55,8 @@ if __name__ == '__main__':
     predict_value, state_value = sess.run([predict, last_state], feed_dict={x: [[first]]})
     next_x = choose_result(predict_value, index2word)
 
-    sys.stdout.write(first_str[0])
+    if first_str and first_str[0]:
+        sys.stdout.write(first_str[0])
     while next_x != config.TAG_END:
         result += chr(next_x)
         sys.stdout.write(chr(next_x))
@@ -66,4 +67,4 @@ if __name__ == '__main__':
         })
         next_x = choose_result(predict_value, index2word)
 
-    print('\n【Coding By Machine】\n%s' % result)
+        # print('\n【Coding By Machine】\n%s' % result)

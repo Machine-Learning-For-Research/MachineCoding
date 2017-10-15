@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     batch_size = config.BATCH_SIZE
 
-    depth = len(words)
+    depth = len(words) + 2
     x = tf.placeholder(tf.int32, [batch_size, config.MAX_TEXT_LENGTH + 2])
     y = tf.placeholder(tf.int32, [batch_size, config.MAX_TEXT_LENGTH + 2])
 
