@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 import config
 import os
 
@@ -13,16 +13,17 @@ class WordsInfo:
 
 
 def dump(words, index2word):
-    with open(config.WORDS_PATH, 'w') as f:
-        pickle.dump(WordsInfo(words, index2word), f)
+    with open(config.WORDS_PATH, 'wb+') as f:
+        dumpStr = pickle.dumps(WordsInfo(words, index2word))
+        pickle.dump(dumpStr, f)
 
 
 def parse():
     path = config.WORDS_PATH
     if not os.path.exists(path):
         raise RuntimeError('File "%s" not found' % path)
-    with open(path, 'r') as f:
-        info = pickle.load(f)
+    with open(path, 'rb') as f:
+        info = pickle.loads(pickle.load(f))
         if info is None:
             raise RuntimeError('Load WordsInfo failure.')
         return info.words, info.index2word

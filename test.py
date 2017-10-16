@@ -12,8 +12,8 @@ import wordsmanager as wm
 words = list(range(10))
 index = {1: 10}
 
-# wm.dump(words, index)
-# print 'Dumped.'
+wm.dump(words, index)
+print('Dumped.')
 
 
 a, b = wm.parse()

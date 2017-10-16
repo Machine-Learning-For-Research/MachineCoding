@@ -1,8 +1,8 @@
 # train path
 TRAIN_PATH = [
-    '/Users/zijiao/tensorflow',
+    # '/Users/zijiao/tensorflow',
     # '/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7',
-    # 'D:\Program Files\Anaconda2\envs\python3.5',
+    'D:\Program Files\Anaconda2\envs\python3.5',
 ]
 
 # dump file for words
