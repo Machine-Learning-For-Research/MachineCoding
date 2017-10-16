@@ -15,16 +15,21 @@ def inference(inputs, depth, batch_size):
     n_hidden = config.N_HIDDEN
     n_layers = config.N_LAYERS
 
-    # (batch_size, n_steps) => (batch_size, n_steps, depth)
-    x = tf.cast(tf.one_hot(inputs, depth), tf.float32)
+    # # (batch_size, n_steps) => (batch_size, n_steps, depth)
+    # x = tf.cast(tf.one_hot(inputs, depth), tf.float32)
+    #
+    # # (batch_size, n_steps, depth) => (batch_size x n_steps, depth)
+    # x = tf.reshape(x, [-1, depth])
+    #
+    # W = weight_variables([depth, n_hidden])
+    # b = bias_variables([n_hidden])
+    # # (batch_size x n_steps, depth) => (batch_size x n_steps, n_hidden)
+    # x = tf.matmul(x, W) + b
 
-    # (batch_size, n_steps, depth) => (batch_size x n_steps, depth)
-    x = tf.reshape(x, [-1, depth])
-
-    W = weight_variables([depth, n_hidden])
-    b = bias_variables([n_hidden])
-    # (batch_size x n_steps, depth) => (batch_size x n_steps, n_hidden)
-    x = tf.matmul(x, W) + b
+    with tf.device("/cpu:0"):
+        embedding = tf.get_variable('embedding', initializer=tf.random_uniform(
+            [depth, n_hidden], -1.0, 1.0))
+        x = tf.nn.embedding_lookup(embedding, inputs)
 
     # (batch_size x n_steps, n_hidden) => (batch_size, n_steps, n_hidden)
     x = tf.reshape(x, [batch_size, -1, n_hidden])

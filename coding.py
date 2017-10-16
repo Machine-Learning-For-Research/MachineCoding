@@ -1,8 +1,9 @@
+# coding=utf-8
 import datetime
 
-from Tools.scripts.treesync import raw_input
 import tensorflow as tf
 import numpy as np
+import wordsmanager as wm
 import data_processor
 import config
 import model
@@ -10,19 +11,17 @@ import sys
 
 
 def choose_result(pred, index2word):
+    pred[pred.argsort()[:-5]] = 0
     t = np.cumsum(pred)
     s = np.sum(pred)
-    index = np.searchsorted(t, s * np.random.rand(1))[0]
-    return index2word[index]
+    index = np.searchsorted(t, s * np.random.rand(1), side='right')[0]
+    return index, index2word[index]
 
 
 if __name__ == '__main__':
-    files = data_processor.get_all_files(config.TRAIN_PATH)
-    print('Load %d files.' % len(files))
-
-    data_set, words, index2word, word2index, occupy = data_processor.parse(files)
+    words, index2word = wm.parse()
     print('Total %d words.' % len(words))
-    print('Total %d data.' % len(data_set))
+    word2index = {v: k for k, v in index2word.items()}
 
     batch_size = 1
     depth = len(words) + 2
@@ -53,18 +52,18 @@ if __name__ == '__main__':
     result = str(first_str[0])
 
     predict_value, state_value = sess.run([predict, last_state], feed_dict={x: [[first]]})
-    next_x = choose_result(predict_value, index2word)
+    next_x, next_w = choose_result(predict_value, index2word)
 
     if first_str and first_str[0]:
         sys.stdout.write(first_str[0])
-    while next_x != config.TAG_END:
-        result += chr(next_x)
-        sys.stdout.write(chr(next_x))
+    while next_w != config.TAG_END:
+        result += chr(next_w)
+        sys.stdout.write(chr(next_w))
         sys.stdout.flush()
         predict_value, state_value = sess.run([predict, last_state], feed_dict={
             x: [[next_x]],
             initial_state: state_value
         })
-        next_x = choose_result(predict_value, index2word)
+        next_x, next_w = choose_result(predict_value, index2word)
 
         # print('\n【Coding By Machine】\n%s' % result)

@@ -5,6 +5,7 @@ import collections
 
 import config
 import numpy as np
+import wordsmanager as wm
 
 
 def get_all_files(dir_paths):
@@ -55,37 +56,37 @@ def parse(files):
                 data = [config.TAG_START]
                 for word in part:
                     word = ord(word)
-                    if word > 255:
+                    if word > 127:
                         continue
                     data.append(word)
                     words.append(word)
                 data.append(config.TAG_END)
                 data_set.append(data)
-            # try:
-            #     blocks = f.read().split('\n')
-            # except:
-            #     continue
-            # for part in blocks:
-            #     # if len(part) < 10 or len(part) > 500:
-            #     if len(part) < config.MIN_TEXT_LENGTH \
-            #             or len(part) > config.MAX_TEXT_LENGTH \
-            #             or part.__contains__('#') \
-            #             or part.__contains__('<') \
-            #             or part.__contains__('>') \
-            #             or part.__contains__('\\') \
-            #             or part.__contains__('--') \
-            #             or (part.strip() and part.strip()[0].isupper()) \
-            #             or part.strip().startswith('"'):
-            #         continue
-            #     data = [config.TAG_START]
-            #     for word in part:
-            #         word = ord(word)
-            #         if word >= config.TAG_START:
-            #             continue
-            #         data.append(word)
-            #         words.append(word)
-            #     data.append(config.TAG_END)
-            #     data_set.append(data)
+                # try:
+                #     blocks = f.read().split('\n')
+                # except:
+                #     continue
+                # for part in blocks:
+                #     # if len(part) < 10 or len(part) > 500:
+                #     if len(part) < config.MIN_TEXT_LENGTH \
+                #             or len(part) > config.MAX_TEXT_LENGTH \
+                #             or part.__contains__('#') \
+                #             or part.__contains__('<') \
+                #             or part.__contains__('>') \
+                #             or part.__contains__('\\') \
+                #             or part.__contains__('--') \
+                #             or (part.strip() and part.strip()[0].isupper()) \
+                #             or part.strip().startswith('"'):
+                #         continue
+                #     data = [config.TAG_START]
+                #     for word in part:
+                #         word = ord(word)
+                #         if word >= config.TAG_START:
+                #             continue
+                #         data.append(word)
+                #         words.append(word)
+                #     data.append(config.TAG_END)
+                #     data_set.append(data)
     # words = sorted(list(words))
 
     # 这里根据包含了每个字对应的频率
@@ -99,10 +100,12 @@ def parse(files):
     index2word = {i + occupy_offset: words[i] for i in range(len(words))}
     index2word[0] = config.TAG_START
     index2word[1] = config.TAG_END
-    word2index = {v: k for k, v in index2word.items()}
+    wm.dump(words, index2word)
+    print('Dump words info finished.')
 
+    word2index = {v: k for k, v in index2word.items()}
     data_set = [list(map(lambda w: word2index[w], data)) for data in data_set]
-    return data_set, words, index2word, word2index, word2index[ord(' ')]
+    return data_set, words, index2word, word2index[ord(' ')]
 
 
 def array2str(array, map=None):
@@ -165,7 +168,7 @@ if __name__ == '__main__':
     files = get_all_files(config.TRAIN_PATH)
     print('Load %d files.' % len(files))
 
-    data_set, words, index2word, word2index, occupy = parse(files[:])
+    data_set, words, index2word, occupy = parse(files[:])
     print('Total %d words.' % len(words))
     print('Total %d data.' % len(data_set))
 

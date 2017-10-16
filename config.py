@@ -1,9 +1,12 @@
 # train path
 TRAIN_PATH = [
-    # '/Users/zijiao/tensorflow',
+    '/Users/zijiao/tensorflow',
     # '/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7',
-    'D:\Program Files\Anaconda2\envs\python3.5',
+    # 'D:\Program Files\Anaconda2\envs\python3.5',
 ]
+
+# dump file for words
+WORDS_PATH = 'words.pkl'
 
 # choose the text if contains one of keywords
 TAG_KEYWORDS = ['def ', 'class ']
@@ -28,5 +31,5 @@ MAX_EPOCH = 100
 
 LEARNING_RATE = 1e-2
 
-N_HIDDEN = 256
+N_HIDDEN = 128
 N_LAYERS = 2

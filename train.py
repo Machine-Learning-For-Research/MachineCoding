@@ -9,7 +9,7 @@ if __name__ == '__main__':
     files = data_processor.get_all_files(config.TRAIN_PATH)
     print('Load %d files.' % len(files))
 
-    data_set, words, index2word, word2index, occupy = data_processor.parse(files)
+    data_set, words, index2word, occupy = data_processor.parse(files)
     print('Total %d words.' % len(words))
     print('Total %d data.' % len(data_set))
 

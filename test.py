@@ -1,23 +1,21 @@
+import heapq
 import random
 import sys
 
 import tensorflow as tf
 import numpy as np
 import time
+import os
+
+import wordsmanager as wm
+
+words = list(range(10))
+index = {1: 10}
+
+# wm.dump(words, index)
+# print 'Dumped.'
 
 
-# i = 0
-# while True:
-#     time.sleep(1)
-#     sys.stdout.write('\r' + str(i))
-#     sys.stdout.flush()
-#     i += 1
-
-a = [
-    [1, 2, 3],
-    [4, 5, 6, 7],
-    [8, 9, 10],
-]
-random.shuffle(a)
+a, b = wm.parse()
 print(a)
-
+print(b)

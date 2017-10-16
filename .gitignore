@@ -1,3 +1,4 @@
 .idea
 *.pyc
 model_params
+/words.pkl
