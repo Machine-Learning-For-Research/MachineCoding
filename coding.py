@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     if first_str and first_str[0]:
         sys.stdout.write(first_str[0])
-    while next_w != config.TAG_END:
+    while next_w not in (config.TAG_START,config.TAG_END):
         result += chr(next_w)
         sys.stdout.write(chr(next_w))
         sys.stdout.flush()
