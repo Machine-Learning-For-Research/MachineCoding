@@ -62,32 +62,6 @@ def parse(files):
                     words.append(word)
                 data.append(config.TAG_END)
                 data_set.append(data)
-                # try:
-                #     blocks = f.read().split('\n')
-                # except:
-                #     continue
-                # for part in blocks:
-                #     # if len(part) < 10 or len(part) > 500:
-                #     if len(part) < config.MIN_TEXT_LENGTH \
-                #             or len(part) > config.MAX_TEXT_LENGTH \
-                #             or part.__contains__('#') \
-                #             or part.__contains__('<') \
-                #             or part.__contains__('>') \
-                #             or part.__contains__('\\') \
-                #             or part.__contains__('--') \
-                #             or (part.strip() and part.strip()[0].isupper()) \
-                #             or part.strip().startswith('"'):
-                #         continue
-                #     data = [config.TAG_START]
-                #     for word in part:
-                #         word = ord(word)
-                #         if word >= config.TAG_START:
-                #             continue
-                #         data.append(word)
-                #         words.append(word)
-                #     data.append(config.TAG_END)
-                #     data_set.append(data)
-    # words = sorted(list(words))
 
     # 这里根据包含了每个字对应的频率
     counter = collections.Counter(words)
