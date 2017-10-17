@@ -1,14 +1,14 @@
-##深度学习实现AI写代码
+## 深度学习实现AI写代码
 *利用LSTM长短期记忆的RNN网络来自动生成python代码*
 
-####数据处理
+#### 数据处理
 * 遍历每个文件夹中的子文件
 * 如果是文件夹，则回到步骤1
 * 如果是文件，则取.py结尾的文件
 * 读文件，按照"\n\n\n"分割，遍历每部分
 * 如果包含`def `和`class `，则取出
 * 如果文本长度不在100 - 1000则移除
-####模型训练
+#### 模型训练
 模型代码
 ```python
 def inference(inputs, depth, batch_size):
@@ -37,7 +37,7 @@ def inference(inputs, depth, batch_size):
 
     return x, initial_state, last_state
 ```
-####模型预测
+#### 模型预测
 预测代码
 ```python
 if __name__ == '__main__':
