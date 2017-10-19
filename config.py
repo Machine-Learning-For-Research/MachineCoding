@@ -1,8 +1,8 @@
 # train path
 TRAIN_PATH = [
-    # '/Users/zijiao/tensorflow',
+    '/Users/zijiao/tensorflow',
     # '/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7',
-    'D:\Program Files\Anaconda2\envs\python3.5',
+    # 'D:\Program Files\Anaconda2\envs\python3.5',
 ]
 
 # dump file for words
@@ -10,10 +10,6 @@ WORDS_PATH = 'words.pkl'
 
 # choose the text if contains one of keywords
 TAG_KEYWORDS = ['def ', 'class ']
-
-# for line
-# MIN_TEXT_LENGTH = 30
-# MAX_TEXT_LENGTH = 80
 
 # for part
 MIN_TEXT_LENGTH = 100
