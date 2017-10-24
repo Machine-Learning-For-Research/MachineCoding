@@ -13,14 +13,14 @@
   ]
   ```
 
-* 运行`train.py`开始训练，输出如下：
+* 运行`train.py`开始训练，输出如下
 
   ![](doc/train.png)
 
 
 #### 模型使用
 
-训练完模型之后，直接运行`coding.py`即可开始自动生成代码，如下：
+训练完模型之后，直接运行`coding.py`即可开始自动生成代码，如下
 
 ```python
 Load last model params successfully.
