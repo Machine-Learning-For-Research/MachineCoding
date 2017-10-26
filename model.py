@@ -1,3 +1,4 @@
+# coding=utf-8
 import tensorflow as tf
 import numpy as np
 import config
@@ -20,16 +21,20 @@ def inference(inputs, depth, batch_size):
             [depth, n_hidden], -1.0, 1.0))
         x = tf.nn.embedding_lookup(embedding, inputs)
 
+    # 展开数据
     # (batch_size x n_steps, n_hidden) => (batch_size, n_steps, n_hidden)
     x = tf.reshape(x, [batch_size, -1, n_hidden])
 
     cell = tf.contrib.rnn.BasicLSTMCell(n_hidden, state_is_tuple=True)
+    # 拼接出多个Cell
     cell = tf.contrib.rnn.MultiRNNCell([cell] * n_layers, state_is_tuple=True)
     initial_state = cell.zero_state(batch_size, tf.float32)
 
+    # 取出输出值
     outputs, last_state = tf.nn.dynamic_rnn(cell, x, initial_state=initial_state)
     x = tf.reshape(outputs, [-1, n_hidden])
 
+    # 得到输出
     W = weight_variables([n_hidden, depth])
     b = bias_variables([depth])
     # (batch_size, n_hidden) => (batch_size, n_outputs) = (batch_size, depth)
